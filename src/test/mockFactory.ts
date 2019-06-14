@@ -136,7 +136,7 @@ export class MockFactory {
     const data = {
       provider: {
         name: "azure",
-        location: "West US 2"
+        region: "West US 2"
       },
       plugins: [
         "serverless-azure-functions"
