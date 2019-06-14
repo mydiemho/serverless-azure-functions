@@ -2,6 +2,7 @@ import { isAbsolute, join } from "path";
 import Serverless from "serverless";
 import AzureProvider from "../../provider/azureProvider";
 import { InvokeService } from "../../services/invokeService";
+import fs from "fs";
 
 export class AzureInvoke {
   public hooks: { [eventName: string]: Promise<any> };
@@ -47,6 +48,10 @@ export class AzureInvoke {
           data: {
             usage: "Data string for body of request",
             shortcut: "d"
+          },
+          name: {
+            usage: "Name of the function to invoke",
+            shortcut: "n"
           }
         }
       }
@@ -55,8 +60,19 @@ export class AzureInvoke {
   }
 
   private async invoke() {
-    this.service.invoke();
-
+    //this.service.invoke();
+    if (!("name" in this.options)) {
+      this.serverless.cli.log("Need to provide a name of function to invoke");
+      return;
+    }
+    const funcToInvoke = this.options["name"];
+    const exists = fs.existsSync(funcToInvoke);
+    if (!exists) {
+      this.serverless.cli.log(`Function ${funcToInvoke} does not exist`);
+      return;
+    }
+    this.serverless.cli.log(`Invoking ${funcToInvoke}`);
+    //const functionObject = this.serverless.service.getFunction(funcToInvoke);
 
     // const func = this.options.function;
     // const functionObject = this.serverless.service.getFunction(func);

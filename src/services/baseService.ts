@@ -12,7 +12,7 @@ export abstract class BaseService {
   protected resourceGroup: string;
   protected deploymentName: string;
 
-  protected constructor(protected serverless: Serverless, protected options?: Serverless.Options) {
+  protected constructor(protected serverless: Serverless, protected options?: Serverless.Options, authenticate = true) {
     Guard.null(serverless);
 
     this.baseUrl = "https://management.azure.com";
@@ -22,7 +22,7 @@ export abstract class BaseService {
     this.resourceGroup = serverless.service.provider["resourceGroup"] || `${this.serviceName}-rg`;
     this.deploymentName = serverless.service.provider["deploymentName"] || `${this.resourceGroup}-deployment`;
 
-    if (!this.credentials) {
+    if (!this.credentials && authenticate) {
       throw new Error(`Azure Credentials has not been set in ${this.constructor.name}`);
     }
   }
