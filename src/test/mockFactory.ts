@@ -130,7 +130,7 @@ export class MockFactory {
     return Promise.resolve(response);
   }
 
-  public static createTestServerlessYml(asYaml = false, functionMetadata?): ServerlessAzureConfig {
+  public static createTestServerlessYml(asYaml = false, functionMetadata?): ServerlessAzureConfig | string {
     const data = {
       "provider": {
         "name": "azure",
